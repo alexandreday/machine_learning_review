@@ -7,11 +7,6 @@ Purpose :
 '''
 
 import numpy as np
-from matplotlib import pyplot as plt
-
-import matplotlib as mpl
-from ml_style import ml_style_2 as sty
-mpl.rcParams.update(sty.style)
 
 ## average update time (delta_E function) is 2.4e-6 seconds <-
 
@@ -20,7 +15,7 @@ def main():
     Lx = 10
     Ly = 10
     L = Lx
-    n_sample=1000
+    n_sample=500
     n_spin = Lx*Ly
     hz=0.
     J=-1.0
@@ -36,18 +31,10 @@ def main():
         std_mag=np.std(magnetization/n_spin)/np.sqrt(n_sample) # Error on estimate
         data.append([t,average_mag,std_mag])
         print("Average magnetization at temperature T=%.3f :\t %.3f +- %.4f"%(t,average_mag, std_mag))
-
-    ### -- Plotting data -- ###
+    
     print("Saving data")
     data=np.array(data)
-    np.savetxt("mag_vs_T.txt",data,delimiter='\t')
-
-    print("Plotting results")
-    plt.errorbar(data[:,0],data[:,1],yerr=data[:,2],fmt='o')
-    plt.xlabel("T")
-    plt.ylabel("Magnetization")
-    plt.title("Magnetization as a function of temperature for the 2D Ising model \n (J=%.2f, hz=%.2f, n_sample/temp.= %i, L=%i)"%(J,hz,n_sample,L))
-    plt.show()
+    np.savetxt("mag_vs_T_L%i.txt"%L, data, delimiter='\t')
 
 def MC(model, beta=0.3, n_sample=1000, reset=False):
     """

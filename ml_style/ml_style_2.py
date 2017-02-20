@@ -1,6 +1,6 @@
 from cycler import cycler
 style= {
-  "lines.linewidth": 2.0,
+  "lines.linewidth": 1.5,
   "patch.linewidth": 0.5,
   "legend.fancybox": True,
   "axes.prop_cycle": cycler('color',[
@@ -29,12 +29,12 @@ style= {
   "axes.linewidth": 3.0,
   "font.size":10.0,
   "font.family":"computer modern typewriter",
-  "lines.linewidth": 4,
+  "lines.linewidth": 3,
   "lines.solid_capstyle": "butt",
   "savefig.edgecolor": "#f0f0f0",
   "savefig.facecolor": "#f0f0f0",
-  "figure.subplot.left"    : 0.08,
+  "figure.subplot.left"    : 0.1,
   "figure.subplot.right"   : 0.95, 
-  "figure.subplot.bottom"  : 0.07,
+  "figure.subplot.bottom"  : 0.1,
   "text.usetex"         : True 
 }
