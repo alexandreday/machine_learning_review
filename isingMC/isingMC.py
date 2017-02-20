@@ -7,19 +7,20 @@ Purpose :
 '''
 
 import numpy as np
+import sys
 
 ## average update time (delta_E function) is 2.4e-6 seconds <-
 
 def main():
-
-    Lx = 40
-    Ly = 40
+    
+    Lx = 10
+    Ly = 10
     L = Lx
-    n_sample=10000
+    n_sample=1000
     n_spin = Lx*Ly
     hz=0.
     J=-1.0
-    T=1.5
+    T = float(sys.argv[1]) # running from command line
 
     ising_model = Lattice2D(Lx=Lx, Ly=Ly, J=J, hz=hz)
     data=[]
