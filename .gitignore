@@ -4,3 +4,4 @@ tags
 IsingMC/data
 .DS_Store
 !.gitignore
+submission.sh
