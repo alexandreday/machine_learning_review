@@ -9,13 +9,26 @@ Purpose :
 import numpy as np
 from matplotlib import pyplot as plt
 
+import matplotlib as mpl
+from ml_style import ml_style_1 as sty
+mpl.rcParams.update(sty.style)
+
 ## average update time (delta_E function) is 2.4e-6 seconds <-
 
 def main():
+
+    x,y=[1,2,3],[3,4,5]
+    plt.scatter([1,2,3],[3,4,5])
+    plt.plot(x,y)
+    plt.scatter([10,2,3],[4,6,7])
+    plt.plot([10,2,3],[4,6,7])
+    plt.show()
+    exit()
+
     Lx = 10
     Ly = 10
-    L=Lx
-    n_sample=500
+    L = Lx
+    n_sample=1000
     n_spin = Lx*Ly
     hz=0.
     J=-1.0
@@ -23,12 +36,12 @@ def main():
     ising_model = Lattice2D(Lx=Lx, Ly=Ly, J=J, hz=hz)
     data=[]
     
-    for t in np.linspace(4.0,0.1,50):
+    for t in np.linspace(4.0,0.1,40):
 
         samples = MC(ising_model, beta=1./t, n_sample=n_sample) # Collecting samples at a given temperature
         magnetization = np.abs(np.sum(samples, axis=(1,2))) # Computing magnetization
         average_mag=np.mean(magnetization)/n_spin
-        std_mag=np.std(magnetization/n_spin) # Error on estimate
+        std_mag=np.std(magnetization/n_spin)/np.sqrt(n_sample) # Error on estimate
         data.append([t,average_mag,std_mag])
         print("Average magnetization at temperature T=%.3f :\t %.3f +- %.4f"%(t,average_mag, std_mag))
 
