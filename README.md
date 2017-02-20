@@ -13,6 +13,7 @@ mpl.rcParams.update(sty.style)
 ```
 This will allow you to plot using the styles specified in ```ml_style/ml_style_1.py```.
 # Updating style sheet
+As we might change the styles as we go along, running the following command will update your style sheets:
 ```
 pip3 install . --upgrade
 ```
