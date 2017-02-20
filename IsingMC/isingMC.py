@@ -19,13 +19,16 @@ def main():
     n_spin = Lx*Ly
     hz=0.
     J=-1.0
-    T=2.5
+    T=1.5
 
     ising_model = Lattice2D(Lx=Lx, Ly=Ly, J=J, hz=hz)
     data=[]
 
     samples=MC(ising_model,beta=1./T, n_sample=n_sample)
-    np.savetxt("mag_vs_T_L%i_T=%.2f.txt"%(L,T), samples, delimiter=',')
+    samples=np.array(samples).reshape(-1,Lx*Ly)
+    samples[samples == -1] = 0 # replace -1 by zeros
+    np.savetxt("mag_vs_T_L%i_T=%.2f.txt"%(L,T), samples,fmt="%i",delimiter=',')
+
     exit()
 
     for t in np.linspace(4.0,0.1,50):
