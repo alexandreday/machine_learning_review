@@ -5,7 +5,6 @@ from ml_style import ml_style_2 as sty
 mpl.rcParams.update(sty.style)
 import numpy as np
 
-
 for l in [8,12,16,20,24]:
     data=np.loadtxt("mag_vs_T_L%i.txt"%l, delimiter='\t')
     #print("Plotting results")

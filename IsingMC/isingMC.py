@@ -12,17 +12,22 @@ import numpy as np
 
 def main():
 
-    Lx = 10
-    Ly = 10
+    Lx = 40
+    Ly = 40
     L = Lx
-    n_sample=500
+    n_sample=10000
     n_spin = Lx*Ly
     hz=0.
     J=-1.0
+    T=2.5
 
     ising_model = Lattice2D(Lx=Lx, Ly=Ly, J=J, hz=hz)
     data=[]
-    
+
+    samples=MC(ising_model,beta=1./T, n_sample=n_sample)
+    np.savetxt("mag_vs_T_L%i_T=%.2f.txt"%(L,T), samples, delimiter=',')
+    exit()
+
     for t in np.linspace(4.0,0.1,50):
 
         samples = MC(ising_model, beta=1./t, n_sample=n_sample) # Collecting samples at a given temperature
