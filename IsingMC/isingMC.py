@@ -19,7 +19,7 @@ def main():
     n_spin = Lx*Ly
     hz=0.
     J=-1.0
-    T=2.5
+    T=3.5
 
     ising_model = Lattice2D(Lx=Lx, Ly=Ly, J=J, hz=hz)
     data=[]
