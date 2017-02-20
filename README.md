@@ -17,3 +17,5 @@ As we might change the styles as we go along, running the following command will
 ```
 pip3 install . --upgrade
 ```
+# What it looks like
+![alt tag](https://github.com/alexandreday/machine_learning_review/blob/master/IsingMC/example.png)
