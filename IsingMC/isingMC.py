@@ -10,20 +10,12 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 import matplotlib as mpl
-from ml_style import ml_style_1 as sty
+from ml_style import ml_style_2 as sty
 mpl.rcParams.update(sty.style)
 
 ## average update time (delta_E function) is 2.4e-6 seconds <-
 
 def main():
-
-    x,y=[1,2,3],[3,4,5]
-    plt.scatter([1,2,3],[3,4,5])
-    plt.plot(x,y)
-    plt.scatter([10,2,3],[4,6,7])
-    plt.plot([10,2,3],[4,6,7])
-    plt.show()
-    exit()
 
     Lx = 10
     Ly = 10
@@ -36,7 +28,7 @@ def main():
     ising_model = Lattice2D(Lx=Lx, Ly=Ly, J=J, hz=hz)
     data=[]
     
-    for t in np.linspace(4.0,0.1,40):
+    for t in np.linspace(4.0,0.1,50):
 
         samples = MC(ising_model, beta=1./t, n_sample=n_sample) # Collecting samples at a given temperature
         magnetization = np.abs(np.sum(samples, axis=(1,2))) # Computing magnetization

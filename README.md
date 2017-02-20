@@ -1,5 +1,5 @@
 # machine_learning_review
-This is a repository for developping the python codes and examples for a review paper on an <b> introduction to machine learning for physicists<b>. 
+This is a repository for developping the python codes and examples for a review paper on an <b> introduction to machine learning for physicists</b>. 
 # Installing style sheet
 Clone or download the repository. Then in the top directory use:
 ```

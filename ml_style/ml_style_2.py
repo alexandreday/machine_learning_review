@@ -1,14 +1,15 @@
+from cycler import cycler
 style= {
   "lines.linewidth": 2.0,
   "patch.linewidth": 0.5,
   "legend.fancybox": True,
-  "axes.color_cycle": [
+  "axes.prop_cycle": cycler('color',[
     "#30a2da",
     "#fc4f30",
     "#e5ae38",
     "#6d904f",
     "#8b8b8b"
-  ],
+  ]),
   "axes.facecolor": "#f0f0f0",
   "axes.labelsize": "large",
   "axes.axisbelow": True,
