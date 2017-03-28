@@ -86,7 +86,6 @@ class Lattice2D:
     """
     Class that encodes the spin state and the methods for computing
     energy given model parameters.
-
     """
 
     def __init__(self, Lx=2, Ly=2, J=-1., hz=0.):
