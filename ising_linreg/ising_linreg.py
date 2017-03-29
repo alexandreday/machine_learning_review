@@ -9,10 +9,9 @@ def main():
     # define system size
     Lx, Ly = 40, 40
     Ns = Lx*Ly
-    n_spin = Lx*Ly
     # define Ising model aprams
     h=0.0 # magnetic field
-    # interactions strength
+    # nn interactions strength
     J=np.zeros((Lx,Ly,Lx,Ly),)
     for i in range(Lx):
         for j in range(Ly):
