@@ -26,7 +26,7 @@ class DataSet(object):
 			data_X = data_X.astype(np.float32)
 			data_X[np.where(data_X==0)]=-1 # replace 0 by -1
 		self._data_X = data_X
-		self._data_Y = data_Y #np.reshape(data_Y,(data_Y.shape[0],1))
+		self._data_Y = np.reshape(data_Y,(data_Y.shape[0],1))
 		self._epochs_completed = 0
 		self._index_in_epoch = 0
 

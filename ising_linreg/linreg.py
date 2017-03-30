@@ -32,25 +32,24 @@ class Linear_Regression:
 
 	def _create_placeholders(self):
 		with tf.name_scope('data'):
-			self.X=tf.placeholder(tf.float32,shape=(self.n_samples,self.n_feats), name="X_data")
-			self.Y=tf.placeholder(tf.float32,shape=(self.n_samples,), name="Y_data")
+			self.X=tf.placeholder(tf.float32, shape=(None,self.n_feats), name="X_data")
+			self.Y=tf.placeholder(tf.float32, shape=(None,1), name="Y_data")
 
 	def _create_model(self):
 		with tf.name_scope('model'):
-			self.J=tf.Variable( tf.truncated_normal(shape=(self.n_feats,self.n_feats) ),dtype=tf.float32, name="int")
-			self.h=tf.Variable( tf.truncated_normal(shape=(self.n_feats,) ),dtype=tf.float32, name="field")
+			self.J=tf.Variable( tf.zeros((self.n_feats,self.n_feats), ),dtype=tf.float32, name="int")
+			self.h=tf.Variable( tf.zeros((self.n_feats,), ),dtype=tf.float32, name="field")
 			# define model
 			self.Y_predicted=0.5*tf.einsum('ai,ij,aj->a',self.X,self.J,self.X) \
-                               + tf.einsum('ai,i->a',self.X,self.h)
-			#self.Y_predicted=tf.reshape(self.Y_predicted,shape=(self.Y_predicted.shape[0].value,1) )
-			#print((self.Y_predicted.shape[0].value,1))
-			#print(self.Y_predicted.shape,self.Y.shape)
-			#exit()
-
+#							   + tf.einsum('ai,i->a',self.X,self.h)
+			#print(self.Y_predicted.shape)
+			
 	def _create_loss(self):
 		with tf.name_scope('loss'):
 			#self.loss = tf.square(self.Y - self.Y_predicted, name="loss")
-			self.loss = tf.reduce_sum(tf.pow(self.Y - self.Y_predicted, 2))/(2.0*self.n_samples)
+			self.loss = tf.reduce_sum(tf.pow(self.Y - self.Y_predicted, 2))/(2.0*self.n_samples) \
+						+ 0.1*tf.reduce_sum(tf.abs(self.J))
+			#self.loss = tf.reduce_mean( tf.nn.l2_loss(self.Y - self.Y_predicted))
 
 	def _create_accuracy(self):
 		with tf.name_scope('accuracy'):
@@ -58,7 +57,8 @@ class Linear_Regression:
 
 	def _create_optimiser(self,kwargs):
 		with tf.name_scope('optimiser'):
-			self.optimizer = tf.train.GradientDescentOptimizer(**kwargs).minimize(self.loss,global_step=self.global_step)
+			#self.optimizer = tf.train.GradientDescentOptimizer(**kwargs).minimize(self.loss,global_step=self.global_step)
+			self.optimizer = tf.train.AdamOptimizer(**kwargs).minimize(self.loss,global_step=self.global_step)
 
 
 	def _create_summaries(self):

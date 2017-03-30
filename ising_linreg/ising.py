@@ -13,18 +13,22 @@ import numpy as np
 
 def main(_):
 
+	training_epochs=1000
+	ckpt_freq=200000 # define inverse check pointing frequency
+
 	n_samples=1000
-	train_size=500
+	train_size=800
 	validation_size=0
-	batch_size=500
-	
+	batch_size=100
 	
 	learning_rate=0.001 # learning rate
-	opt_params=dict(learning_rate=learning_rate)
-	param_str='/lr=%0.4f' %(learning_rate)
+	beta1=0.9
+	beta2=0.9999
+	epsilon=1e-09
 
-	training_epochs=100
-	ckpt_freq=2000 # define check pointing frequency
+	opt_params=dict(learning_rate=learning_rate,beta1=beta1,beta2=beta2,epsilon=epsilon)
+	#opt_params=dict(learning_rate=learning_rate)
+	param_str='/lr=%0.4f' %(learning_rate)
 
 	# import data
 	states=process_data.read_data_sets(data_params,train_size=train_size,validation_size=validation_size)
@@ -69,10 +73,10 @@ def main(_):
 				saver.save(sess, './checkpoints/ising_reg', global_step=step)
 
 			print(sess.run( model.loss, feed_dict={model.X: batch_X,model.Y: batch_Y}))
-			print(sess.run( model.loss, feed_dict={model.X: states.test.data_X, model.Y: states.test.data_Y}) )
-			print('---------')
+
 		# Step 9: test model
-		#print(sess.run(model.loss, feed_dict={model.X: states.test.data_X, model.Y: states.test.data_Y}) )
+		print(sess.run( model.loss, feed_dict={model.X: states.test.data_X, model.Y: states.test.data_Y}) )
+			
 
 if __name__ == '__main__':
 
