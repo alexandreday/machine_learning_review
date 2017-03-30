@@ -115,7 +115,7 @@ class Lattice2D:
         '''Computes total energy of lattice E = J*s_i*s_j+hz*s_i (summed over indices)'''
         
         EJ, Eh = (0., 0.)
-        for i,j in self.grid_pos: # This could be vectorized, but for clarity is left as a for loop !
+        for i,j in self.grid_pos: # This could be vectorized, but for clarity is left as a for loop ! Marin: YES, look up np.einsum!
             sij=self.spin_state[i,j]
             snn=self.spin_state[self.nn[i,j]] # nn spins
             EJ += sij*np.sum(snn)

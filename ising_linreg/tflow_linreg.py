@@ -25,7 +25,7 @@ T=4.0 # temperature
 
 # load data
 train_X=np.loadtxt("mag_vs_T_L%i_T=%.2f.txt" %(Lx,T),delimiter=",",dtype=np.int)
-train_Y=np.loadtxt("energies_T_L%i_T=%.2f.txt" %(Lx,T),delimiter=",",dtype=np.int)
+train_Y=np.loadtxt("energies_vs_T_L%i_T=%.2f.txt" %(Lx,T),delimiter=",",dtype=np.int)
 
 n_samples = train_X.shape[0]
 
