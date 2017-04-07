@@ -3,6 +3,7 @@ from __future__ import division
 from __future__ import print_function
 
 import numpy as np
+import scipy.sparse as sp
 import collections
 import pickle
 
@@ -24,7 +25,6 @@ class DataSet(object):
 
 		if dtype == dtypes.float32:
 			data_X = data_X.astype(np.float32)
-			data_X[np.where(data_X==0)]=-1 # replace 0 by -1
 		self._data_X = data_X
 		self._data_Y = np.reshape(data_Y,(data_Y.shape[0],1))
 		self._epochs_completed = 0
@@ -69,14 +69,43 @@ class DataSet(object):
 		return self._data_X[start:end], self._data_Y[start:end]
 
 
+def ising_energies(states,Lx,Ly):
+	"""
+	This function calculates the energies of the states
+	"""
+	J=np.zeros((Lx,Ly,Lx,Ly),)
+	for i in range(Lx):
+		for j in range(Ly):
+			for k in [-1,1]:
+				for l in [-1,1]:
+					J[i,j,(i+k)%Lx,(j+l)%Ly]-=1.0
+	J=J.reshape(Lx*Ly,Lx*Ly)
+	# compute energies
+	E = 0.5*np.einsum('...i,ij,...j->...',states,J,states)
+	# extract indices of nn interactions
+	J=J.reshape(Lx*Ly*Lx*Ly,)
+	J_sp = sp.csr_matrix(J)
+	inds_nn=J_sp.nonzero()[1]
+
+	return E, inds_nn
+
 def read_data_sets(data_params,dtype=dtypes.float32,train_size=80000,validation_size=5000):
 
-	states = "mag_vs_T_L%i_T=%.2f.txt" %(data_params['L'],data_params['T'])
-	energies = "energies_vs_T_L%i_T=%.2f.txt" %(data_params['L'],data_params['T'])
+	states_str = "mag_vs_T_L%i_T=%.2f.txt" %(data_params['L'],data_params['T'])
 	
-	Data=[]
-	Data.append(np.loadtxt(states,delimiter=",",dtype=np.int))
-	Data.append(np.loadtxt(energies,delimiter=",",dtype=np.int))
+	states=np.loadtxt(states_str,delimiter=",",dtype=np.int)
+	states[np.where(states==0)]=-1 # replace 0 by -1
+	energies,inds_nn=ising_energies(states,data_params['L'],data_params['L'])
+
+	states=np.einsum('...i,...j->...ij', states, states)
+	shape=states.shape
+	states=states.reshape((shape[0],shape[1]*shape[2]))
+
+	# nearest neighbours only
+	if data_params['nn']:
+		states=states[:,inds_nn]
+
+	Data=[states,energies]
 
 
 	# define test and train data sets
