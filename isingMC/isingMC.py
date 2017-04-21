@@ -13,10 +13,10 @@ import sys
 
 def main():
     
-    Lx = 40
-    Ly = 40
+    Lx = 10
+    Ly = 10
     L = Lx
-    n_sample=10000
+    n_sample=40000
     n_spin = Lx*Ly
     hz=0.
     J=-1.0

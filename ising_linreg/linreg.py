@@ -2,8 +2,6 @@
 import sys, os
 
 import tensorflow as tf
-seed=12
-tf.set_random_seed(seed)
 
 import numpy as np
 import scipy.sparse as sp
@@ -25,7 +23,7 @@ class Linear_Regression(object):
 			self.n_feats=1
 			self.symmetric=True
 		elif self.nn:
-			self.n_feats=4*L**2
+			self.n_feats=2*L**2
 		else:
 			self.n_feats=L**4
 
@@ -57,10 +55,11 @@ class Linear_Regression(object):
 	def _create_placeholders(self):
 		with tf.name_scope('data'):
 			if self.J_const:
-				self.X=tf.placeholder(tf.float32, shape=(None,4*self.L**2), name="X_data")
+				self.X=tf.placeholder(tf.float32, shape=(None,2*self.L**2), name="X_data")
 			else:
 				self.X=tf.placeholder(tf.float32, shape=(None,self.n_feats), name="X_data")
 			self.Y=tf.placeholder(tf.float32, shape=(None,1), name="Y_data")
+			
 
 	def _create_model(self):
 		with tf.name_scope('model'):
@@ -70,9 +69,8 @@ class Linear_Regression(object):
 				Jnn=np.zeros((self.L,self.L,self.L,self.L),)
 				for i in range(self.L):
 					for j in range(self.L):
-						for k in [-1,1]:
-							for l in [-1,1]:
-								Jnn[i,j,(i+k)%self.L,(j+l)%self.L]-=1.0
+						for kl in [[1,0],[0,1]]: #[[0,-1],[1,0],[0,1],[-1,0]]:
+							Jnn[i,j,(i+kl[0])%self.Lx,(j+kl[1])%self.Ly]-=1.0
 				Jnn=Jnn.reshape((self.L**4,1))
 				Jnn=sp.csr_matrix(Jnn).data
 				Jnn=Jnn.reshape(Jnn.shape[0],1)
@@ -80,7 +78,7 @@ class Linear_Regression(object):
 				self.Eint=tf.Variable(Jnn,trainable=False,name='J',dtype=tf.float32)
 				self.J=tf.Variable( tf.random_normal((self.n_feats,self.n_feats), ),dtype=tf.float32, name="int")
 				# compute model
-				self.Y_predicted=0.5*self.J*tf.matmul(self.X,self.Eint)
+				self.Y_predicted=self.J*tf.matmul(self.X,self.Eint)
 
 			else:
 				# initiate weights
@@ -96,19 +94,23 @@ class Linear_Regression(object):
 				else:
 					self.J=tf.identity(self.W)
 				# compute model
-				self.Y_predicted=0.5*tf.matmul(self.X,self.J)
+				self.Y_predicted=tf.matmul(self.X,self.J)
 
 
 			
 			
 	def _create_loss(self):
 		with tf.name_scope('loss'):
-			self.loss = tf.reduce_mean( tf.nn.l2_loss(self.Y - self.Y_predicted))
+			self.loss = tf.reduce_mean( tf.nn.l2_loss(self.Y - self.Y_predicted) )/10.0 \
+						+ 1.0*tf.reduce_mean( tf.abs( self.J ) )
+#						+ 50.0*tf.reduce_mean( tf.abs( tf.gather(self.J,[101*i for i in range(100)]) ) )
+#						+ 0.8*tf.reduce_mean( tf.nn.l2_loss(self.J))
+						
 
 	def _create_optimiser(self,kwargs):
 		with tf.name_scope('optimiser'):
-			#self.optimizer = tf.train.GradientDescentOptimizer(**kwargs).minimize(self.loss,global_step=self.global_step)
-			self.optimizer = tf.train.AdamOptimizer(**kwargs).minimize(self.loss,global_step=self.global_step)
+			self.optimizer = tf.train.GradientDescentOptimizer(**kwargs).minimize(self.loss,global_step=self.global_step)
+			#self.optimizer = tf.train.AdamOptimizer(**kwargs).minimize(self.loss,global_step=self.global_step)
 
 	def _measure_accuracy(self):
 		"""to be written"""

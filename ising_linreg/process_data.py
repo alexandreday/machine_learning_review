@@ -47,7 +47,7 @@ class DataSet(object):
 		return self._epochs_completed
 
 	def next_batch(self, batch_size, seed=None):
-		if seed:
+		if seed is not None:
 			np.random.seed(seed)
 		"""Return the next `batch_size` examples from this data set."""
 
@@ -69,44 +69,53 @@ class DataSet(object):
 		return self._data_X[start:end], self._data_Y[start:end]
 
 
-def ising_energies(states,Lx,Ly):
+def ising_energies(states,Lx,Ly,noise_width=0.0):
 	"""
-	This function calculates the energies of the states
+	This function calculates the energies of the states in the nn Hamiltonian
 	"""
 	J=np.zeros((Lx,Ly,Lx,Ly),)
 	for i in range(Lx):
 		for j in range(Ly):
-			for k in [-1,1]:
-				for l in [-1,1]:
-					J[i,j,(i+k)%Lx,(j+l)%Ly]-=1.0
+			for kl in [[1,0],[0,1]]: #[[0,-1],[1,0],[0,1],[-1,0]]:
+					J[i,j,(i+kl[0])%Lx,(j+kl[1])%Ly]-=1.0
 	J=J.reshape(Lx*Ly,Lx*Ly)
 	# compute energies
-	E = 0.5*np.einsum('...i,ij,...j->...',states,J,states)
+	E = np.einsum('...i,ij,...j->...',states,J,states) + np.random.normal(0,noise_width,size=states.shape[0])
 	# extract indices of nn interactions
+	J=J.reshape(Lx*Ly,Lx*Ly)
 	J=J.reshape(Lx*Ly*Lx*Ly,)
 	J_sp = sp.csr_matrix(J)
 	inds_nn=J_sp.nonzero()[1]
 
 	return E, inds_nn
 
-def read_data_sets(data_params,dtype=dtypes.float32,train_size=80000,validation_size=5000):
+def read_data_sets(data_params,dtype=dtypes.float32,train_size=80000,validation_size=0,noise_width=0.0):
 
 	states_str = "mag_vs_T_L%i_T=%.2f.txt" %(data_params['L'],data_params['T'])
 	
 	states=np.loadtxt(states_str,delimiter=",",dtype=np.int)
 	states[np.where(states==0)]=-1 # replace 0 by -1
-	energies,inds_nn=ising_energies(states,data_params['L'],data_params['L'])
+
+	energies,inds_nn=ising_energies(states,data_params['L'],data_params['L'],noise_width=noise_width)
+	
 
 	states=np.einsum('...i,...j->...ij', states, states)
 	shape=states.shape
+	
 	states=states.reshape((shape[0],shape[1]*shape[2]))
 
 	# nearest neighbours only
 	if data_params['nn']:
 		states=states[:,inds_nn]
-
+	
 	Data=[states,energies]
 
+	"""
+	np.savetxt('ising_states_L={}_T={}.txt'.format(data_params['L'],data_params['T']),states)
+	np.savetxt('ising_energies_L={}_T={}.txt'.format(data_params['L'],data_params['T']),energies)
+
+	print('exiting...')
+	"""
 
 	# define test and train data sets
 	train_data_X=Data[0][:train_size]
