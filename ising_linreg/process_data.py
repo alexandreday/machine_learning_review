@@ -7,6 +7,8 @@ import scipy.sparse as sp
 import collections
 import pickle
 
+np.random.seed(12)
+
 from tensorflow.python.framework import dtypes
 
 
@@ -89,20 +91,63 @@ def ising_energies(states,Lx,Ly,noise_width=0.0):
 
 	return E, inds_nn
 
+
+def ising_energies_1D(states,L,noise_width=0.0):
+	"""
+	This function calculates the energies of the states in the nn Hamiltonian
+	"""
+	J=np.zeros((L,L),)
+	for i in range(L):
+		J[i,(i+1)%L]-=0.5
+		J[i,(i-1)%L]-=0.5
+	# compute energies
+	E = np.einsum('...i,ij,...j->...',states,J,states) + np.random.normal(0,noise_width,size=states.shape[0])
+	# extract indices of nn interactions
+	J=J.reshape(L*L,)
+	J_sp = sp.csr_matrix(J)
+	inds_nn=J_sp.nonzero()[1]
+
+	return E, inds_nn
+
+def unique_rows(a, **kwargs):
+
+    rowtype = np.dtype((np.void, a.dtype.itemsize * a.shape[1]))
+    b = np.ascontiguousarray(a).view(rowtype)
+    return_index = kwargs.pop('return_index', False)
+    out = np.unique(b, return_index=True, **kwargs)
+    idx = out[1]
+    uvals = a[idx]
+    if (not return_index) and (len(out) == 2):
+        return uvals
+    elif return_index:
+        return (uvals,) + out[1:]
+    else:
+        return (uvals,) + out[2:]
+
 def read_data_sets(data_params,dtype=dtypes.float32,train_size=80000,validation_size=0,noise_width=0.0):
 
+	"""
 	states_str = "mag_vs_T_L%i_T=%.2f.txt" %(data_params['L'],data_params['T'])
 	
 	states=np.loadtxt(states_str,delimiter=",",dtype=np.int)
 	states[np.where(states==0)]=-1 # replace 0 by -1
 
 	energies,inds_nn=ising_energies(states,data_params['L'],data_params['L'],noise_width=noise_width)
-	
+	"""
+
+	states=np.random.choice([-1, 1], size=(400,data_params['L']))
+	#print(states.shape )
+	#exit()
+	energies,inds_nn=ising_energies_1D(states,data_params['L'],noise_width=noise_width)
 
 	states=np.einsum('...i,...j->...ij', states, states)
 	shape=states.shape
 	
 	states=states.reshape((shape[0],shape[1]*shape[2]))
+
+	#states, inds=unique_rows( states ,**{'return_index':True})
+	#energies=energies[inds]
+
 
 	# nearest neighbours only
 	if data_params['nn']:
