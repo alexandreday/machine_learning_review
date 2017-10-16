@@ -17,7 +17,7 @@ def main(_):
 
 	symmetric=True # interaction coupling symemtry
 	J_const=False # constant nn interaction
-	nn=False # nearest-neighbour only
+	nn=True # nearest-neighbour only
 
 
 	training_epochs=1000
@@ -44,16 +44,13 @@ def main(_):
 	states=process_data.read_data_sets(data_params,train_size=train_size,
 										validation_size=validation_size,noise_width=noise_width)
 
-	# define model
-	model=Linear_Regression(Lx,opt_params,J_const=J_const,nn=nn,symmetric=symmetric)
-
-
-	"""
+	
+	#"""
 	X = states.train.data_X
 	Y = states.train.data_Y
 	Jlinreg=np.dot( np.linalg.pinv(X.T.dot(X) ), np.dot(X.T, Y) )
 
-	'''
+	#'''
 	print(X.shape)
 	_, s, _ = np.linalg.svd(X, full_matrices=True)
 	print(s.shape)
@@ -62,7 +59,7 @@ def main(_):
 	plt.show()
 
 	exit()
-	'''
+	#'''
 
 	print(Jlinreg)
 
@@ -77,7 +74,11 @@ def main(_):
 	plt.show()
 
 	exit()
-	"""
+	#"""
+
+	# define model
+	model=Linear_Regression(Lx,opt_params,J_const=J_const,nn=nn,symmetric=symmetric)
+
 	
 	saver = tf.train.Saver() # defaults to saving all variables
 	with tf.Session() as sess:
@@ -160,8 +161,8 @@ if __name__ == '__main__':
 
 	### define Ising model aprams
 	# system size
-	Lx=10
-	Ly=10
+	Lx=40
+	Ly=40
 	Ns=Lx*Ly
 	# temperature
 	T=3.0 

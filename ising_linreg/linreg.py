@@ -17,7 +17,7 @@ class Linear_Regression(object):
 		
 		if self.J_const:
 			if not nn:
-				print("expectien nn=True!")
+				print("expecting nn=True!")
 				print("exiting..")
 				exit()
 			self.n_feats=1
