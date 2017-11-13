@@ -7,3 +7,6 @@ IsingMC/data
 submission.sh
 .txt
 analysis
+
+data*
+data/*
