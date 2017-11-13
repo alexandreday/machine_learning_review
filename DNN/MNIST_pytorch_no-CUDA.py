@@ -7,6 +7,13 @@ import torch.nn.functional as F # implements forward and backward definitions of
 import torch.optim as optim # different update rules such as SGD, Nesterov-SGD, Adam, RMSProp, etc
 from torchvision import datasets, transforms # load MNIST data
 
+
+#####################################################################################################################
+###  https://github.com/pytorch/examples/tree/master/mnist                                                        ###
+###  http://pytorch.org/tutorials/beginner/blitz/tensor_tutorial.html#sphx-glr-beginner-blitz-tensor-tutorial-py  ###
+#####################################################################################################################
+
+
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
 parser.add_argument('--batch-size', type=int, default=64, metavar='N',
@@ -27,11 +34,10 @@ parser.add_argument('--log-interval', type=int, default=10, metavar='N',
                     help='how many batches to wait before logging training status')
 args = parser.parse_args()
 
-
+# set seed of random number generator
 torch.manual_seed(args.seed)
 
 kwargs = {} # CUDA arguments, if enabled
-
 # load and noralise train and test data
 train_loader = torch.utils.data.DataLoader(
     datasets.MNIST('../data', train=True, download=True,
@@ -40,6 +46,7 @@ train_loader = torch.utils.data.DataLoader(
                        transforms.Normalize((0.1307,), (0.3081,))
                    ])),
     batch_size=args.batch_size, shuffle=True, **kwargs)
+
 test_loader = torch.utils.data.DataLoader(
     datasets.MNIST('../data', train=False, transform=transforms.Compose([
                        transforms.ToTensor(),
@@ -122,14 +129,14 @@ def train(epoch):
 
     Parameters
     ----------
-    epoch: int
-        Training epoch number
+    epoch : int
+        Training epoch number.
 
     '''
 
     # set model to training mode (affects Dropout and BatchNorm)
     model.train()
-    # oop over training data
+    # loop over training data
     for batch_idx, (data, label) in enumerate(train_loader):
         # wrap minibatch data in Variable
         data, label = Variable(data), Variable(label)
