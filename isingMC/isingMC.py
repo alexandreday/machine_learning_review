@@ -16,7 +16,7 @@ def main():
     Lx = 10
     Ly = 10
     L = Lx
-    n_sample=40000
+    n_sample = 10000
     n_spin = Lx*Ly
     hz=0.
     J=-1.0
@@ -33,6 +33,7 @@ def main():
     exit()
 
     for t in np.linspace(4.0,0.1,50):
+        print('Current temperature %.2f'% t)
 
         samples = MC(ising_model, beta=1./t, n_sample=n_sample) # Collecting samples at a given temperature
         magnetization = np.abs(np.sum(samples, axis=(1,2))) # Computing magnetization
@@ -79,7 +80,6 @@ def MC(model, beta=0.3, n_sample=1000, reset=False):
         sample_list.append(np.copy(model.spin_state))
     
     return np.array(sample_list)
-
 
 
 class Lattice2D:
