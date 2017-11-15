@@ -93,7 +93,7 @@ class Net(nn.Module):
         # max pooling over a (2, 2) window
         x = F.max_pool2d(x, (2, 2)) # x.size() = (*,10,12,12)
         # apply relu
-        x = F.relu(x) # x.size() = (*,1,12,12)
+        x = F.relu(x) # x.size() = (*,10,12,12)
         # apply convolutional layer 2
         x = self.conv2(x) # x.size() = (*,20,8,8)
         # apply 2d dropout
@@ -107,7 +107,7 @@ class Net(nn.Module):
         x = x.view(-1, 20*4*4) # x.reshape(-1,20*4*4) 
         # apply rectified linear unit
         x = F.relu(self.fc1(x))
-        # apply Dropout
+        # apply dropout
         x = F.dropout(x, training=self.training)
         # apply affine operation fc2
         x = self.fc2(x)
