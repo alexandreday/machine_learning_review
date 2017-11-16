@@ -92,7 +92,7 @@ class Lattice2D:
 
         self.Lx, self.Ly = Lx, Ly
         self.shape =(Lx, Ly)
-        self.spin_state= 2. * (np.round( np.random.rand(Lx, Ly) ) - 0.5) # Initiliaze lattice with spin states -1. or +1
+        self.spin_state= 2. * (np.round( np.random.rand(Lx, Ly) ) - 0.5) # Initiliaze lattice with spin states -1. or +1.
         self.J=J
         self.hz=hz
         self.nn = np.empty(shape=(Lx, Ly), dtype=list)
@@ -109,6 +109,10 @@ class Lattice2D:
 
     def __str__(self): # print spin configuration
         return str(self.spin_state)
+
+    def set_state(self, state): 
+        """ Set configuration to a state specified by the user (float array of shape = (Lx, Ly) ) """
+        self.spin_state=state
 
     def energy(self):
 
