@@ -12,11 +12,15 @@ import sys
 ## average update time (delta_E function) is 2.4e-6 seconds <-
 
 def main():
-    
+
+    """ Example to run :
+    python isingMC.py T=3.0
+    """
+    np.random.seed(0)
     Lx = 10
     Ly = 10
     L = Lx
-    n_sample = 10000
+    n_sample = 1000
     n_spin = Lx*Ly
     hz=0.
     J=-1.0
@@ -130,7 +134,7 @@ class Lattice2D:
     def delta_E(self,ij): # this returns the difference in energy upon flipping spin at position (i,j)
         return -2. * self.J * self.spin_state[ij]*np.sum(self.spin_state[self.nn[ij]])
 
-    def magnetization(self): # Computes magnetization of the current model spin state
+    def magnetization(self): # Computes total magnetization of the current model spin state
         return np.sum(self.spin_state)
     
     def reset(self): # Resets the spin state randomly (high-temperature state)
