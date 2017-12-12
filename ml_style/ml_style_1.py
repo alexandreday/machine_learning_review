@@ -7,7 +7,9 @@ style= {
     "#fc4f30",
     "#e5ae38",
     "#6d904f",
-    "#8b8b8b","#008941", "#006FA6", "#A30059"
+    "#8b8b8b",
+    "#006FA6", 
+    "#A30059"
   ],
   "axes.facecolor": "#f0f0f0",
   "axes.labelsize": "large",
