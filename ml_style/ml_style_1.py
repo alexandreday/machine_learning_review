@@ -1,3 +1,4 @@
+from cycler import cycler
 style= {
   "lines.linewidth": 2.0,
   "patch.linewidth": 0.5,
