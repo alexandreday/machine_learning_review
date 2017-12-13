@@ -2,7 +2,7 @@ style= {
   "lines.linewidth": 2.0,
   "patch.linewidth": 0.5,
   "legend.fancybox": True,
-  "axes.prop_cycle": [
+  "axes.prop_cycle": cycler('color',[
     "#30a2da",
     "#fc4f30",
     "#e5ae38",
@@ -10,7 +10,7 @@ style= {
     "#8b8b8b",
     "#006FA6", 
     "#A30059"
-  ],
+  ]),
   "axes.facecolor": "#f0f0f0",
   "axes.labelsize": "large",
   "axes.axisbelow": True,
