@@ -2,7 +2,7 @@ style= {
   "lines.linewidth": 2.0,
   "patch.linewidth": 0.5,
   "legend.fancybox": True,
-  "axes.color_cycle": [
+  "axes.prop_cycle": [
     "#30a2da",
     "#fc4f30",
     "#e5ae38",
