@@ -10,3 +10,4 @@ analysis
 
 data*
 data/*
+*.egg-info/
