@@ -10,7 +10,9 @@ style= {
     "#6d904f",
     "#8b8b8b",
     "#006FA6", 
-    "#A30059"
+    "#A30059",
+    "#7A87A1","#5B4534",
+    "#1E6E00"
   ]),
   "axes.facecolor": "#f0f0f0",
   "axes.labelsize": "large",
