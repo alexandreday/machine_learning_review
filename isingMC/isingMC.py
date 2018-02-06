@@ -12,11 +12,15 @@ import sys
 ## average update time (delta_E function) is 2.4e-6 seconds <-
 
 def main():
-    
+
+    """ Example to run :
+    python isingMC.py T=3.0
+    """
+    np.random.seed(0)
     Lx = 10
     Ly = 10
     L = Lx
-    n_sample = 10000
+    n_sample = 1000
     n_spin = Lx*Ly
     hz=0.
     J=-1.0
@@ -92,7 +96,7 @@ class Lattice2D:
 
         self.Lx, self.Ly = Lx, Ly
         self.shape =(Lx, Ly)
-        self.spin_state= 2. * (np.round( np.random.rand(Lx, Ly) ) - 0.5) # Initiliaze lattice with spin states -1. or +1
+        self.spin_state= 2. * (np.round( np.random.rand(Lx, Ly) ) - 0.5) # Initiliaze lattice with spin states -1. or +1.
         self.J=J
         self.hz=hz
         self.nn = np.empty(shape=(Lx, Ly), dtype=list)
@@ -110,6 +114,10 @@ class Lattice2D:
     def __str__(self): # print spin configuration
         return str(self.spin_state)
 
+    def set_state(self, state): 
+        """ Set configuration to a state specified by the user (float array of shape = (Lx, Ly) ) """
+        self.spin_state=state
+
     def energy(self):
 
         '''Computes total energy of lattice E = J*s_i*s_j+hz*s_i (summed over indices)'''
@@ -126,7 +134,7 @@ class Lattice2D:
     def delta_E(self,ij): # this returns the difference in energy upon flipping spin at position (i,j)
         return -2. * self.J * self.spin_state[ij]*np.sum(self.spin_state[self.nn[ij]])
 
-    def magnetization(self): # Computes magnetization of the current model spin state
+    def magnetization(self): # Computes total magnetization of the current model spin state
         return np.sum(self.spin_state)
     
     def reset(self): # Resets the spin state randomly (high-temperature state)
