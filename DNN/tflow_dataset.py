@@ -1,16 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
+from __future__ import absolute_import, division, print_function
 import numpy as np
-
 
 import sys, os, argparse
 import tensorflow as tf
-
-#import process_data
-#from linreg import Linear_Regression
 
 # suppress tflow compilation warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
@@ -154,10 +147,10 @@ class Net(object):
 		
 		self.n_feats= 1600 #n_feats
 		self.n_categories=2
-		self.n_samples= 170000 #n_samples
+		#self.n_samples= 170000 #n_samples
 
-		self.n_hidden_1=100
-		self.n_hidden_2=200
+		#self.n_hidden_1=100
+		#self.n_hidden_2=200
 		
 
 		self.dropout_keepprob=0.5
@@ -338,9 +331,9 @@ def main(_):
 if __name__ == '__main__':
 
 	# define number of samples 
-	N_samples=170000
+	#N_samples=170000
 	
-	L=40 #spin chain system size
+	#L=40 #spin chain system size
 	
 	# run ML tool
 	tf.app.run(main=main, argv=[sys.argv[0]] )

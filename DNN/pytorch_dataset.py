@@ -1,4 +1,4 @@
-from __future__ import print_function
+from __future__ import print_function, division
 import torch # pytorch package, allows using GPUs
 from torchvision import datasets, transforms # load MNIST data
 import os,sys
@@ -73,7 +73,7 @@ class IsingDataset(torch.utils.data.Dataset):
 
 	def __getitem__(self, idx):
 
-		sample=(self.Ising_data[0][idx,:,:],self.Ising_data[1][idx])
+		sample=(self.Ising_data[0][idx,...],self.Ising_data[1][idx])
 
 		if self.transform:
 			sample=self.transform(sample)
@@ -92,7 +92,7 @@ print(len(dataset))
 
 
 train_loader = torch.utils.data.DataLoader(
-    dataset,batch_size=20, shuffle=True)
+    dataset,batch_size=20,shuffle=True)
 
 
 # oop over training data

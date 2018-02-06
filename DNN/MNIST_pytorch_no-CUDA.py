@@ -87,21 +87,21 @@ class Net(nn.Module):
         
         '''
 
-        # initial shape: x.size() = (*,1,28,28)
+        # initial shape: x.size() = (:,1,28,28)
         # apply convolutional layer 1
-        x = self.conv1(x) # x.size() = (*,10,24,24)
+        x = self.conv1(x) # x.size() = (:,10,24,24)
         # max pooling over a (2, 2) window
-        x = F.max_pool2d(x, (2, 2)) # x.size() = (*,10,12,12)
+        x = F.max_pool2d(x, (2, 2)) # x.size() = (:,10,12,12)
         # apply relu
-        x = F.relu(x) # x.size() = (*,10,12,12)
+        x = F.relu(x) # x.size() = (:,10,12,12)
         # apply convolutional layer 2
-        x = self.conv2(x) # x.size() = (*,20,8,8)
+        x = self.conv2(x) # x.size() = (:,20,8,8)
         # apply 2d dropout
-        x = self.conv2_drop(x) # x.size() = (*,20,8,8)
+        x = self.conv2_drop(x) # x.size() = (:,20,8,8)
         # if the size is a square you can only specify a single integer for size of squere
-        x = F.max_pool2d(x, 2) # x.size() = (*,20,4,4)
+        x = F.max_pool2d(x, 2) # x.size() = (:,20,4,4)
         # apply relu
-        x = F.relu(x) # x.size() = (*,20,4,4)
+        x = F.relu(x) # x.size() = (:,20,4,4)
         
         # reshape data 
         x = x.view(-1, 20*4*4) # x.reshape(-1,20*4*4) 
@@ -119,7 +119,7 @@ class Net(nn.Module):
 
 # create model
 model = Net()
-# negative log-likelihood (nll) loss for training
+# negative log-likelihood (nll) loss for training: takes class labels NOT one-hot vectors!
 criterion = F.nll_loss
 # define SGD optimizer
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
